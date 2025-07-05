@@ -87,7 +87,7 @@ public class DisassemblyManager {
             subAnims = subAnimations.toArray(subAnims);
             spellAnimation.setSpellSubAnimation(subAnims);
             
-        } catch(Exception e) {
+        } catch (Exception e) {
              System.err.println("com.sfc.sf2.spellAnimation.io.DisassemblyManager.parseGraphics() - Error while parsing graphics data : "+e);
              e.printStackTrace();
         }    
@@ -140,7 +140,7 @@ public class DisassemblyManager {
             s = s.substring(3).trim();
         }
         if (s.startsWith("$")) {
-            return Integer.parseInt(s.substring(1));
+            return Integer.parseInt(s.substring(1), 16);
         } else {
             return Integer.parseInt(s);
         }
