@@ -5,8 +5,9 @@
  */
 package com.sfc.sf2.spellAnimation.gui;
 
-import com.sfc.sf2.spellAnimation.SpellAnimation;
 import com.sfc.sf2.spellAnimation.SpellAnimationFrame;
+import com.sfc.sf2.spellAnimation.SpellSubAnimation;
+import com.sfc.sf2.spellAnimation.layout.SpellAnimationLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -18,48 +19,49 @@ import javax.swing.table.AbstractTableModel;
 public class SpellAnimationFramesTableModel extends AbstractTableModel {
     
     private final Object[][] tableData;
-    private final String[] columns = { "Index", "Duration", "X", "Y", "H Flip", "V Flip", "Z" };
-    private SpellAnimation animation = null;
+    private final String[] columns = { "Index", "X", "Y", "Tiles Width", "Tiles Height", "Tile Index", "Foreground" };
+    private SpellSubAnimation animation = null;
+    private SpellAnimationLayout layout = null;
  
-    public SpellAnimationFramesTableModel(SpellAnimation animation) {
+    public SpellAnimationFramesTableModel(SpellSubAnimation animation) {
         super();
         this.animation = animation;
         tableData = new Object[256][];
         int i = 0;
-        SpellAnimationFrame[] frames = animation.getSpellSubAnimation()[0].getFrames();
+        SpellAnimationFrame[] frames = animation.getFrames();
         if (frames!=null) {
             while (i<frames.length) {
-                tableData[i] = new Object[10];
-                tableData[i][0] = Integer.toString(frames[i].getIndex());
-                tableData[i][1] = Integer.toString(frames[i].getDuration());
-                tableData[i][2] = Integer.toString(frames[i].getX());
-                tableData[i][3] = Integer.toString(frames[i].getY());
+                tableData[i] = new Object[7];
+                tableData[i][0] = frames[i].getIndex();
+                tableData[i][1] = frames[i].getX();
+                tableData[i][2] = frames[i].getY();
+                tableData[i][3] = frames[i].getW();
+                tableData[i][4] = frames[i].getH();
+                tableData[i][5] = frames[i].getTileIndex();
+                tableData[i][6] = frames[i].getForeground();
                 i++;
             }
         }
         while (i<tableData.length) {
-            tableData[i] = new Object[10];
-            tableData[i][0] = "";
-            tableData[i][1] = "";
-            tableData[i][2] = "0";
-            tableData[i][3] = "0";
-            tableData[i][4] = "0";
-            tableData[i][5] = false;
-            tableData[i][6] = false;
-            tableData[i][7] = false;
-            tableData[i][8] = "0";
-            tableData[i][9] = "0";
+            tableData[i] = new Object[7];
+            tableData[i][0] = 0;
+            tableData[i][1] = 0;
+            tableData[i][2] = 0;
+            tableData[i][3] = 0;
+            tableData[i][4] = 0;
+            tableData[i][5] = 0;
+            tableData[i][6] = 0;//true;
             i++;
         }
     }
     
     @Override
     public Class getColumnClass(int column) {
-        if(column == 5 || column == 6 || column == 7) {
-            return Boolean.class;
-        } else {
-            return String.class;
-        }
+        //if(column == 8) {
+        //    return Boolean.class;
+        //} else {
+            return java.lang.Integer.class;
+        //}
     } 
     
     public void updateFrameProperties() {
@@ -67,17 +69,20 @@ public class SpellAnimationFramesTableModel extends AbstractTableModel {
         for(Object[] entry : tableData) {
             try {
                 SpellAnimationFrame frame = new SpellAnimationFrame();
-                frame.setIndex(Integer.parseInt((String)entry[0]));
-                frame.setDuration(Integer.parseInt((String)entry[1]));
-                frame.setX(Integer.parseInt((String)entry[2]));
-                frame.setY(Integer.parseInt((String)entry[3]));
+                frame.setIndex((byte)entry[0]);
+                frame.setX((byte)entry[1]);
+                frame.setY((byte)entry[2]);
+                frame.setW((byte)entry[3]);
+                frame.setH((byte)entry[4]);
+                frame.setTileIndex((byte)entry[5]);
+                frame.setForeground((byte)entry[6]);//((Boolean)entry[8]);
                 entries.add(frame);
             } catch(Exception e) {
                 break;
             }
         }
         SpellAnimationFrame[] returnedEntries = new SpellAnimationFrame[entries.size()];
-        animation.getSpellSubAnimation()[0].setFrames(entries.toArray(returnedEntries));
+        animation.setFrames(entries.toArray(returnedEntries));
     }    
     
     @Override
@@ -88,15 +93,14 @@ public class SpellAnimationFramesTableModel extends AbstractTableModel {
     public void setValueAt(Object value, int row, int col) {
         tableData[row][col] = value;
         updateFrameProperties();
-        //animation.getLayout().updateDisplayProperties();
-        //animation.getLayout().getPanel().revalidate();
-        //animation.getLayout().getPanel().repaint();
-    }    
+        layout.updateDisplayProperties();
+        layout.repaintAnim();
+    }
  
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return true;
-    }    
+    }
     
     @Override
     public int getRowCount() {
@@ -111,5 +115,13 @@ public class SpellAnimationFramesTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int columnIndex) {
         return columns[columnIndex];
+    }
+    
+    public void setLayout(SpellAnimationLayout layout) {
+        this.layout = layout;
+    }
+    
+    public void setSpellAnimation(SpellSubAnimation animation) {
+        this.animation = animation;
     }
 }

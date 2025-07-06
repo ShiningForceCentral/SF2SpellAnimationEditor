@@ -14,7 +14,7 @@ import com.sfc.sf2.spellGraphic.SpellGraphic;
 public class SpellAnimation {
     
     private SpellGraphic spellGraphic;
-    private SpellSubAnimation[] spellSubAnimation;
+    private SpellSubAnimation[] spellSubAnimations;
 
     public SpellGraphic getSpellGraphic() {
         return spellGraphic;
@@ -24,11 +24,11 @@ public class SpellAnimation {
         this.spellGraphic = spellGraphic;
     }
 
-    public SpellSubAnimation[] getSpellSubAnimation() {
-        return spellSubAnimation;
+    public SpellSubAnimation[] getSpellSubAnimations() {
+        return spellSubAnimations;
     }
 
-    public void setSpellSubAnimation(SpellSubAnimation[] spellSubAnimation) {
-        this.spellSubAnimation = spellSubAnimation;
+    public void setSpellSubAnimations(SpellSubAnimation[] spellSubAnimations) {
+        this.spellSubAnimations = spellSubAnimations;
     }
 }

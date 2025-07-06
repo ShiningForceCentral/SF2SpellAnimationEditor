@@ -33,12 +33,13 @@ public class DisassemblyManager {
             File file = new File(spellAnimationPath);
             Scanner scan = new Scanner(file);
             header = "";
-            int frameIndex = -1;
+            byte frameIndex = -1;
             List<SpellSubAnimation> subAnimations = new ArrayList();
             SpellSubAnimation spellSubAnimation = null;
             List<SpellAnimationFrame> animationFrames = null;
             while(scan.hasNext()) {
                 String line = scan.nextLine().trim();
+                int newLineVal;
                 if (line.length() > 2 && !line.startsWith(";")) {
                     isHeader = false;
                     if (!line.startsWith("dc.")) {
@@ -55,21 +56,26 @@ public class DisassemblyManager {
                         subAnimations.add(spellSubAnimation);
                         animationFrames = new ArrayList();
                         line = line.substring(line.indexOf("dc.")+4).trim();
+                        String line2 = scan.nextLine();
+                        line2 = line2.substring(line2.indexOf("dc.")+4).trim();
+                        newLineVal = CombineBytesToWord(valueOf(line), valueOf(line2));
                     } else {
                         frameIndex++;
                         line = line.substring(line.indexOf("dc.")+4).trim();
+                        String line2 = scan.nextLine();
+                        line2 = line2.substring(line2.indexOf("dc.")+4).trim();
+                        newLineVal = CombineBytesToWord(valueOf(line), valueOf(line2));
                     }
                     
                     SpellAnimationFrame frame = new SpellAnimationFrame();
                     frame.setIndex(frameIndex);
-                    frame.setX(valueOf(line));
-                    frame.setY(getNextLine(scan));
-                    frame.setDuration(getNextLine(scan));
-                    frame.setTileIndexBase(getNextLine(scan));
-                    frame.setDrawFlags(getNextLine(scan));
-                    frame.setTileMapOffset(getNextLine(scan));
-                    frame.setFrameFlags(getNextLine(scan));
-                    frame.setLayer(getNextLine(scan));
+                    frame.setX(newLineVal);
+                    frame.setY(getNextWordLine(scan));
+                    frame.setTileIndex(getNextWordLine(scan) - 0x520);
+                    int flags = getNextWordLine(scan);
+                    frame.setW((flags >> 8) & 3);
+                    frame.setH((flags >> 10) & 3);
+                    frame.setForeground(flags & 0xFF);
                     animationFrames.add(frame);
                     
                 } else if (isHeader) {
@@ -85,10 +91,10 @@ public class DisassemblyManager {
             spellAnimation = new SpellAnimation();
             SpellSubAnimation[] subAnims = new SpellSubAnimation[subAnimations.size()];
             subAnims = subAnimations.toArray(subAnims);
-            spellAnimation.setSpellSubAnimation(subAnims);
+            spellAnimation.setSpellSubAnimations(subAnims);
             
         } catch (Exception e) {
-             System.err.println("com.sfc.sf2.spellAnimation.io.DisassemblyManager.parseGraphics() - Error while parsing graphics data : "+e);
+             System.err.println("com.sfc.sf2.spellAnimation.io.DisassemblyManager.parseGraphics() - Error while parsing animation data : "+e);
              e.printStackTrace();
         }    
         System.out.println("com.sfc.sf2.spellAnimation.io.DisassemblyManager.importDisassembly() - Disassembly imported.");
@@ -124,14 +130,27 @@ public class DisassemblyManager {
         System.out.println("com.sfc.sf2.spellAnimation.io.DisassemblyManager.exportDisassembly() - Disassembly exported.");        
     }
     
-    private static int getNextLine(Scanner scan) {
+    /**
+     * Reads 2 lines and concatenates the data (a word) and then returns the data
+     * Temporary code until animation format is made readable
+     */
+    private static int getNextWordLine(Scanner scan) {
         if (scan.hasNext()) {
-            String line = scan.nextLine();
-            line = line.substring(line.indexOf("dc.")+4);
-            return valueOf(line);
+            String line1 = scan.nextLine();
+            line1 = line1.substring(line1.indexOf("dc.")+4).trim();
+            String line2 = scan.nextLine();
+            line2 = line2.substring(line2.indexOf("dc.")+4).trim();
+            return CombineBytesToWord(valueOf(line1), valueOf(line2));
         }
         
         return -1;
+    }
+    
+    /**
+     * Temporary code until animation format is made readable
+     */
+    private static int CombineBytesToWord(int value1, int value2) {
+        return ((value1 << 8) & 0xFF00) + (value2 & 0xFF);
     }
     
     private static int valueOf(String s) {

@@ -14,12 +14,10 @@ public class SpellAnimationFrame {
     private int index;
     private int x;
     private int y;
-    private int duration;       // Duration / delay
-    private int tileIndexBase;  // Tile index base
-    private int drawFlags;      // Palette, priority, flip flags
-    private int tileMapOffset;  // Tile map offset or index
-    private int frameFlags;     // Frame flags (loop, end, etc)
-    private int layer;          // FG or BG
+    private int w;
+    private int h;
+    private int tileIndex;
+    private int unknown;
     
     public int getIndex() {
         return index;
@@ -45,51 +43,35 @@ public class SpellAnimationFrame {
         this.y = y;
     }
 
-    public int getDuration() {
-        return duration;
+    public int getW() {
+        return w;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setW(int w) {
+        this.w = w;
     }
 
-    public int getTileIndexBase() {
-        return tileIndexBase;
+    public int getH() {
+        return h;
     }
 
-    public void setTileIndexBase(int tileIndexBase) {
-        this.tileIndexBase = tileIndexBase;
+    public void setH(int h) {
+        this.h = h;
     }
 
-    public int getDrawFlags() {
-        return drawFlags;
+    public int getTileIndex() {
+        return tileIndex;
     }
 
-    public void setDrawFlags(int drawFlags) {
-        this.drawFlags = drawFlags;
+    public void setTileIndex(int tileIndex) {
+        this.tileIndex = tileIndex;
     }
 
-    public int getTileMapOffset() {
-        return tileMapOffset;
+    public int getForeground() {
+        return unknown;
     }
 
-    public void setTileMapOffset(int tileMapOffset) {
-        this.tileMapOffset = tileMapOffset;
-    }
-
-    public int getFrameFlags() {
-        return frameFlags;
-    }
-
-    public void setFrameFlags(int frameFlags) {
-        this.frameFlags = frameFlags;
-    }
-
-    public int getLayer() {
-        return layer;
-    }
-
-    public void setLayer(int layer) {
-        this.layer = layer;
+    public void setForeground(int foreground) {
+        this.unknown = foreground;
     }
 }
