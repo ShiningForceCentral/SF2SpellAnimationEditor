@@ -11,67 +11,67 @@ package com.sfc.sf2.spellAnimation;
  */
 public class SpellAnimationFrame {
 
-    private int index;
-    private int x;
-    private int y;
-    private int w;
-    private int h;
-    private int tileIndex;
-    private int unknown;
+    private short frameIndex;
+    private short tileIndex;
+    private short x;
+    private short y;
+    private byte w;
+    private byte h;
+    private byte unknown;
     
-    public int getIndex() {
-        return index;
+    public short getFrameIndex() {
+        return frameIndex;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setFrameIndex(short index) {
+        this.frameIndex = index;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getW() {
-        return w;
-    }
-
-    public void setW(int w) {
-        this.w = w;
-    }
-
-    public int getH() {
-        return h;
-    }
-
-    public void setH(int h) {
-        this.h = h;
-    }
-
-    public int getTileIndex() {
+    public short getTileIndex() {
         return tileIndex;
     }
 
-    public void setTileIndex(int tileIndex) {
+    public void setTileIndex(short tileIndex) {
         this.tileIndex = tileIndex;
     }
 
-    public int getForeground() {
+    public short getX() {
+        return x;
+    }
+
+    public void setX(short x) {
+        this.x = x;
+    }
+
+    public short getY() {
+        return y;
+    }
+
+    public void setY(short y) {
+        this.y = y;
+    }
+
+    public byte getW() {
+        return w;
+    }
+
+    public void setW(byte w) {
+        this.w = w;
+    }
+
+    public byte getH() {
+        return h;
+    }
+
+    public void setH(byte h) {
+        this.h = h;
+    }
+
+    public byte getForeground() {
         return unknown;
     }
 
-    public void setForeground(int foreground) {
+    public void setForeground(byte foreground) {
         this.unknown = foreground;
     }
 }

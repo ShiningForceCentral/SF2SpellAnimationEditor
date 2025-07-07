@@ -718,6 +718,7 @@ public class MainEditor extends javax.swing.JFrame implements ActionListener {
             spellAnimationLayout.setBackground(spellAnimationManager.getBackgroundManager().getBackgrounds()[0]);
         spellAnimationLayout.setGround(spellAnimationManager.getGroundManager().getGround());
         spellAnimationLayout.setSpellAnimation(spellAnimationManager.getSpellAnimation());
+        spellAnimationLayout.setSubAnimationIndex(0);
         spellAnimationLayout.updateDisplayProperties();
         spellAnimationLayout.setCurrentDisplaySize((int)jSpinner1.getValue());
         SpellSubAnimation[] subAnimations = spellAnimationManager.getSpellAnimation().getSpellSubAnimations();
@@ -726,6 +727,7 @@ public class MainEditor extends javax.swing.JFrame implements ActionListener {
             names[i] = subAnimations[i].getName();
         }
         jComboBox1.setModel(new DefaultComboBoxModel<>(names));
+        jComboBox1.setSelectedIndex(0);
         updateTableData();
     }//GEN-LAST:event_jButton18ActionPerformed
 

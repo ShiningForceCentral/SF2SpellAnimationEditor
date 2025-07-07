@@ -34,7 +34,7 @@ public class SpellAnimationLayout extends JPanel {
     private static final int GROUND_BASE_X = 136;
     private static final int GROUND_BASE_Y = 140;
     
-    private int displaySize;
+    private int displaySize = 1;
     private boolean showGrid = false;
     
     private Background background;
@@ -49,8 +49,6 @@ public class SpellAnimationLayout extends JPanel {
     private int currentSubAnimation = 0;
     private int currentAnimationFrame = 0;
     
-    private int currentDisplaySize = 1;
-    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);   
@@ -60,6 +58,7 @@ public class SpellAnimationLayout extends JPanel {
     public BufferedImage buildImage() {
         BufferedImage image = buildImage(false, false);
         setSize(image.getWidth(), image.getHeight());
+        image = resize(image);
         if (showGrid) { drawGrid(image); }
         return image;
     }
@@ -90,16 +89,23 @@ public class SpellAnimationLayout extends JPanel {
         if (spellAnimationFrameImage != null)
             return spellAnimationFrameImage;
         System.out.println("Animation: " + subAnimation.getName() + ". Frame: " + index);
+        BufferedImage image = new BufferedImage(150, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
         
         SpellAnimationFrame frame = subAnimation.getFrames()[index];
         
-        Tile tile = spellAnimation.getSpellGraphic().getTiles()[0];//[frame.getTileIndexBase()];
-        int x = frame.getX();
-        int y = frame.getY();
+        int startIndex = frame.getTileIndex();
+        if (startIndex >= 0 && startIndex < subAnimation.getFrames().length) {
+            int x = frame.getX();
+            int y = frame.getY();
+            for (int j = 0; j < frame.getH(); j++) {
+                for (int i = 0; i < frame.getW(); i++) {
+                    Tile tile = spellAnimation.getSpellGraphic().getTiles()[startIndex + i + j * 8];
+                    g.drawImage(tile.getImage(), x + i*8, y + j*8, null);
+                }
+            }
+        }
         
-        BufferedImage image = new BufferedImage(150, 100, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = image.getGraphics();
-        g.drawImage(tile.getImage(), x, y, null);
         g.dispose();
         spellAnimationFrameImage = image;
         return image;
@@ -140,9 +146,9 @@ public class SpellAnimationLayout extends JPanel {
     }
     
     private BufferedImage resize(BufferedImage image) {
-        BufferedImage newImage = new BufferedImage(image.getWidth()*currentDisplaySize, image.getHeight()*currentDisplaySize, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage newImage = new BufferedImage(image.getWidth()*displaySize, image.getHeight()*displaySize, BufferedImage.TYPE_INT_ARGB);
         Graphics g = newImage.getGraphics();
-        g.drawImage(image, 0, 0, image.getWidth()*currentDisplaySize, image.getHeight()*currentDisplaySize, null);
+        g.drawImage(image, 0, 0, image.getWidth()*displaySize, image.getHeight()*displaySize, null);
         g.dispose();
         return newImage;
     }
@@ -221,11 +227,11 @@ public class SpellAnimationLayout extends JPanel {
     }
 
     public int getCurrentDisplaySize() {
-        return currentDisplaySize;
+        return displaySize;
     }
 
-    public void setCurrentDisplaySize(int currentDisplaySize) {
-        this.currentDisplaySize = currentDisplaySize;
+    public void setCurrentDisplaySize(int displaySize) {
+        this.displaySize = displaySize;
     }
 
     public void setShowGrid(boolean showGrid) {

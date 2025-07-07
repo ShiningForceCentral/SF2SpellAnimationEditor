@@ -39,7 +39,7 @@ public class DisassemblyManager {
             List<SpellAnimationFrame> animationFrames = null;
             while(scan.hasNext()) {
                 String line = scan.nextLine().trim();
-                int newLineVal;
+                short newLineVal;
                 if (line.length() > 2 && !line.startsWith(";")) {
                     isHeader = false;
                     if (!line.startsWith("dc.")) {
@@ -68,14 +68,14 @@ public class DisassemblyManager {
                     }
                     
                     SpellAnimationFrame frame = new SpellAnimationFrame();
-                    frame.setIndex(frameIndex);
+                    frame.setFrameIndex(frameIndex);
                     frame.setX(newLineVal);
                     frame.setY(getNextWordLine(scan));
-                    frame.setTileIndex(getNextWordLine(scan) - 0x520);
+                    frame.setTileIndex((short)(getNextWordLine(scan) - 0x520));
                     int flags = getNextWordLine(scan);
-                    frame.setW((flags >> 8) & 3);
-                    frame.setH((flags >> 10) & 3);
-                    frame.setForeground(flags & 0xFF);
+                    frame.setW((byte)(((flags >> 8) & 3)+1));
+                    frame.setH((byte)(((flags >> 10) & 3)+1));
+                    frame.setForeground((byte)(flags & 0xFF));
                     animationFrames.add(frame);
                     
                 } else if (isHeader) {
@@ -114,7 +114,7 @@ public class DisassemblyManager {
             animationFileBytes[3] = (byte)(anim.getEndSpellAnim());
 
             for(int i=0;i<frameNumber;i++){
-                animationFileBytes[8+i*8+0] = (byte)(anim.getFrames()[i].getIndex());
+                animationFileBytes[8+i*8+0] = (byte)(anim.getFrames()[i].getFrameIndex());
                 animationFileBytes[8+i*8+1] = (byte)(anim.getFrames()[i].getDuration());
                 animationFileBytes[8+i*8+2] = (byte)(anim.getFrames()[i].getX());
                 animationFileBytes[8+i*8+3] = (byte)(anim.getFrames()[i].getY());
@@ -134,7 +134,7 @@ public class DisassemblyManager {
      * Reads 2 lines and concatenates the data (a word) and then returns the data
      * Temporary code until animation format is made readable
      */
-    private static int getNextWordLine(Scanner scan) {
+    private static short getNextWordLine(Scanner scan) {
         if (scan.hasNext()) {
             String line1 = scan.nextLine();
             line1 = line1.substring(line1.indexOf("dc.")+4).trim();
@@ -149,9 +149,18 @@ public class DisassemblyManager {
     /**
      * Temporary code until animation format is made readable
      */
-    private static int CombineBytesToWord(int value1, int value2) {
-        return ((value1 << 8) & 0xFF00) + (value2 & 0xFF);
+    private static short CombineBytesToWord(int value1, int value2) {
+        return (short)(((value1 << 8) & 0xFF00) + (value2 & 0xFF));
     }
+    
+    /*private static short getNextWord(byte[] data, int cursor){
+        ByteBuffer bb = ByteBuffer.allocate(2);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        bb.put(data[cursor+1]);
+        bb.put(data[cursor]);
+        short s = bb.getShort(0);
+        return s;
+    }*/
     
     private static int valueOf(String s) {
         s = s.trim();

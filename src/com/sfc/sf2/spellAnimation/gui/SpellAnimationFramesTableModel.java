@@ -19,7 +19,7 @@ import javax.swing.table.AbstractTableModel;
 public class SpellAnimationFramesTableModel extends AbstractTableModel {
     
     private final Object[][] tableData;
-    private final String[] columns = { "Index", "X", "Y", "Tiles Width", "Tiles Height", "Tile Index", "Foreground" };
+    private final String[] columns = { "Index", "Tile Index", "X", "Y", "Tiles Width", "Tiles Height", "Foreground" };
     private SpellSubAnimation animation = null;
     private SpellAnimationLayout layout = null;
  
@@ -32,36 +32,36 @@ public class SpellAnimationFramesTableModel extends AbstractTableModel {
         if (frames!=null) {
             while (i<frames.length) {
                 tableData[i] = new Object[7];
-                tableData[i][0] = frames[i].getIndex();
-                tableData[i][1] = frames[i].getX();
-                tableData[i][2] = frames[i].getY();
-                tableData[i][3] = frames[i].getW();
-                tableData[i][4] = frames[i].getH();
-                tableData[i][5] = frames[i].getTileIndex();
+                tableData[i][0] = frames[i].getFrameIndex();
+                tableData[i][1] = frames[i].getTileIndex();
+                tableData[i][2] = frames[i].getX();
+                tableData[i][3] = frames[i].getY();
+                tableData[i][4] = frames[i].getW();
+                tableData[i][5] = frames[i].getH();
                 tableData[i][6] = frames[i].getForeground();
                 i++;
             }
         }
         while (i<tableData.length) {
             tableData[i] = new Object[7];
-            tableData[i][0] = 0;
-            tableData[i][1] = 0;
-            tableData[i][2] = 0;
-            tableData[i][3] = 0;
-            tableData[i][4] = 0;
-            tableData[i][5] = 0;
-            tableData[i][6] = 0;//true;
+            tableData[i][0] = (short)0;
+            tableData[i][1] = (short)0;
+            tableData[i][2] = (short)0;
+            tableData[i][3] = (short)0;
+            tableData[i][4] = (byte)0;
+            tableData[i][5] = (byte)0;
+            tableData[i][6] = (byte)0;
             i++;
         }
     }
     
     @Override
     public Class getColumnClass(int column) {
-        //if(column == 8) {
-        //    return Boolean.class;
-        //} else {
-            return java.lang.Integer.class;
-        //}
+        if(column <= 3) {
+            return java.lang.Short.class;
+        } else {
+            return java.lang.Byte.class;
+        }
     } 
     
     public void updateFrameProperties() {
@@ -69,13 +69,13 @@ public class SpellAnimationFramesTableModel extends AbstractTableModel {
         for(Object[] entry : tableData) {
             try {
                 SpellAnimationFrame frame = new SpellAnimationFrame();
-                frame.setIndex((byte)entry[0]);
-                frame.setX((byte)entry[1]);
-                frame.setY((byte)entry[2]);
-                frame.setW((byte)entry[3]);
-                frame.setH((byte)entry[4]);
-                frame.setTileIndex((byte)entry[5]);
-                frame.setForeground((byte)entry[6]);//((Boolean)entry[8]);
+                frame.setFrameIndex((short)entry[0]);
+                frame.setTileIndex((short)entry[1]);
+                frame.setX((short)entry[2]);
+                frame.setY((short)entry[3]);
+                frame.setW((byte)entry[4]);
+                frame.setH((byte)entry[5]);
+                frame.setForeground((byte)entry[6]);
                 entries.add(frame);
             } catch(Exception e) {
                 break;
