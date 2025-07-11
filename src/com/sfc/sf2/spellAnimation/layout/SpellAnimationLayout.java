@@ -103,7 +103,7 @@ public class SpellAnimationLayout extends JPanel {
             for (int j = 0; j < frame.getH(); j++) {
                 for (int i = 0; i < frame.getW(); i++) {
                     Tile tile = spellAnimation.getSpellGraphic().getTiles()[startIndex + i + j * 8];
-                    g.drawImage(tile.getImage(), x + i*8, y + j*8, null);
+                    g.drawImage(tile.getIndexedColorImage(), x + i*8, y + j*8, null);
                 }
             }
         }
