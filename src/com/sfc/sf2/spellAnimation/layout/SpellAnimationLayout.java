@@ -65,7 +65,7 @@ public class SpellAnimationLayout extends JPanel {
     
     public BufferedImage buildImage(boolean pngExport, boolean spellAnimationOnly) {
         
-        BufferedImage image = new BufferedImage(256, 224, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
         Graphics g = image.getGraphics();
         
         if (!pngExport && background != null)
@@ -89,13 +89,15 @@ public class SpellAnimationLayout extends JPanel {
         if (spellAnimationFrameImage != null)
             return spellAnimationFrameImage;
         System.out.println("Animation: " + subAnimation.getName() + ". Frame: " + index);
-        BufferedImage image = new BufferedImage(150, 100, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
         Graphics g = image.getGraphics();
         
+        for (int f = 0; f < subAnimation.getFrames().length; f++) {
+            
         SpellAnimationFrame frame = subAnimation.getFrames()[index];
         
         int startIndex = frame.getTileIndex();
-        if (startIndex >= 0 && startIndex < subAnimation.getFrames().length) {
+        if (startIndex >= 0 && startIndex < spellAnimation.getSpellGraphic().getTiles().length) {
             int x = frame.getX();
             int y = frame.getY();
             for (int j = 0; j < frame.getH(); j++) {
@@ -104,6 +106,7 @@ public class SpellAnimationLayout extends JPanel {
                     g.drawImage(tile.getImage(), x + i*8, y + j*8, null);
                 }
             }
+        }
         }
         
         g.dispose();

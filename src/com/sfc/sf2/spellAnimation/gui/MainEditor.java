@@ -230,7 +230,7 @@ public class MainEditor extends javax.swing.JFrame implements ActionListener {
         jLabel17.setText("Spell :");
 
         jTextField16.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField16.setText(".\\spellgraphics00.bin");
+        jTextField16.setText(".\\spellgraphics04.bin");
 
         jButton22.setText("File...");
         jButton22.addActionListener(new java.awt.event.ActionListener() {
