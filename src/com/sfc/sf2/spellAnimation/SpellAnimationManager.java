@@ -7,7 +7,6 @@ package com.sfc.sf2.spellAnimation;
 
 import com.sfc.sf2.background.BackgroundManager;
 import com.sfc.sf2.spellAnimation.io.DisassemblyManager;
-import com.sfc.sf2.spellAnimation.io.PngManager;
 import com.sfc.sf2.ground.GroundManager;
 import com.sfc.sf2.spellGraphic.SpellGraphicManager;
 import java.io.IOException;
@@ -51,12 +50,6 @@ public class SpellAnimationManager {
         System.out.println("com.sfc.sf2.spellAnimation.SpellAnimationManager.importDisassembly() - Exporting disassembly ...");
         DisassemblyManager.exportDisassembly(spellAnimation, filepath);
         System.out.println("com.sfc.sf2.spellAnimation.SpellAnimationManager.importDisassembly() - Disassembly exported.");        
-    }
-    
-    public void exportPng(String filepath, int selectedPalette){
-        System.out.println("com.sfc.sf2.spellAnimation.SpellAnimationManager.exportPng() - Exporting PNG ...");
-        PngManager.exportPng(spellAnimation, filepath, selectedPalette);
-        System.out.println("com.sfc.sf2.spellAnimation.SpellAnimationManager.exportPng() - PNG exported.");       
     }
     
     private String getAbsoluteFilepath(String filepath) {
